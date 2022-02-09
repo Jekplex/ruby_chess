@@ -107,6 +107,7 @@ class Board
       if @temp[pos[0]][pos[1]] != "-"
         if @temp[pos[0]][pos[1]].color_sym == @temp[real_pos[0]][real_pos[1]].color_sym
           @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.blue
+          @temp[real_pos[0]][real_pos[1]].moves.delete(pos)
         else
           @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red
         end
