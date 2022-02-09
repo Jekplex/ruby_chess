@@ -123,6 +123,12 @@ class Game
     puts ""
   end
 
+  def setup_board_custom(board)
+    white_rook1 = Piece.new(:rook, :white, board.boardpos_to_arraypos("a1"), board)
+    board.place_in(white_rook1)
+    return board
+  end
+
   def setup_board(board)
     
     # pawns
