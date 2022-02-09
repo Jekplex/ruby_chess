@@ -25,7 +25,9 @@ class Piece
     
     # this is probably going to be the longest if statement man has ever seen. lulz
 
-    if @icon == Chess.icons[:white][:king] || @icon == Chess.icons[:black][:king]
+    case @icon
+
+    when Chess.icons[:white][:king], Chess.icons[:black][:king]
 
       @moves << [@position[0] - 1, @position[1] + 1]
       @moves << [@position[0], @position[1] + 1]
@@ -38,8 +40,8 @@ class Piece
 
       @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
 
-    elsif @icon == Chess.icons[:white][:pawn]
-      
+    when Chess.icons[:white][:pawn]
+
       for i in 0..7
         if @position == [1, i]
           @moves << [2, i]
@@ -59,7 +61,7 @@ class Piece
         @moves << [@position[0] + 1, @position[1] - 1]
       end
 
-    elsif @icon == Chess.icons[:black][:pawn]
+    when Chess.icons[:black][:pawn]
 
       for i in 0..7
         if @position == [6, i]
@@ -80,70 +82,102 @@ class Piece
         @moves << [@position[0] - 1, @position[1] + 1]
       end
 
-    elsif @icon == Chess.icons[:black][:rook] || @icons == Chess.icons[:white][:rook]
+    when Chess.icons[:white][:rook], Chess.icons[:black][:rook]
 
       # top
       for i in 1..7
-
         pos = [position[0] + i, @position[1]]
-
         # range check
         if pos[0] >= 8
-          break
+          next
         end
-
-        if @board.at(pos) != "-"
+        if @board.at(pos).to_s != "-"
           @moves << pos
           break
         else
           @moves << pos
         end
-
       end
 
-      # # right
-      # for i in 1..7
+      # down
+      for i in 1..7
+        pos = [position[0] - i, @position[1]]
+        # range check
+        if pos[0] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-"
+          @moves << pos
+          break
+        else
+          @moves << pos
+        end
+      end
 
-      #   pos = [position[0], @position[1] + i]
-
-      #   if @board.at(pos).to_s != "-"
-      #     @moves << pos
-      #     break
-      #   else
-      #     @moves << pos
-      #   end
-
-      # end
-
-      # # bottom
-      # for i in 1..7
-
-      #   pos = [position[0] - i, @position[1]]
-
-      #   if @board.at(pos).to_s != "-"
-      #     @moves << pos
-      #     break
-      #   else
-      #     @moves << pos
-      #   end
-
-      # end
-
-      # # left
-      # for i in 1..7
-
-      #   pos = [position[0], @position[1] - i]
-
-      #   if @board.at(pos).to_s != "-"
-      #     @moves << pos
-      #     break
-      #   else
-      #     @moves << pos
-      #   end
-
-      # end
 
     end
+
+    # if @icon == Chess.icons[:white][:king] || @icon == Chess.icons[:black][:king]
+
+    #   @moves << [@position[0] - 1, @position[1] + 1]
+    #   @moves << [@position[0], @position[1] + 1]
+    #   @moves << [@position[0] + 1, @position[1] + 1]
+    #   @moves << [@position[0] - 1, @position[1]]
+    #   @moves << [@position[0] + 1, @position[1]]
+    #   @moves << [@position[0] - 1, @position[1] - 1]
+    #   @moves << [@position[0], @position[1] - 1]
+    #   @moves << [@position[0] + 1, @position[1] - 1]
+
+    #   @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+
+    # elsif @icon == Chess.icons[:white][:pawn]
+      
+    #   for i in 0..7
+    #     if @position == [1, i]
+    #       @moves << [2, i]
+    #       @moves << [3, i]
+    #     end
+    #   end
+
+    #   if @moves == [] && @board.at([@position[0] + 1, @position[1]]) == "-"
+    #     @moves << [@position[0] + 1, @position[1]]
+    #   end
+
+    #   # pawn attack [white]
+    #   if @board.at([@position[0] + 1, @position[1] + 1]) != "-"
+    #     @moves << [@position[0] + 1, @position[1] + 1]
+    #   end
+    #   if @board.at([@position[0] + 1, @position[1] - 1]) != "-"
+    #     @moves << [@position[0] + 1, @position[1] - 1]
+    #   end
+
+    # elsif @icon == Chess.icons[:black][:pawn]
+
+    #   for i in 0..7
+    #     if @position == [6, i]
+    #       @moves << [5, i]
+    #       @moves << [4, i]
+    #     end
+    #   end
+
+    #   if @moves == [] && @board.at([@position[0] - 1, @position[1]]) == "-"
+    #     @moves << [@position[0] - 1, @position[1]]
+    #   end
+
+    #   # pawn attack [black]
+    #   if @board.at([@position[0] - 1, @position[1] - 1]) != "-"
+    #     @moves << [@position[0] - 1, @position[1] - 1]
+    #   end
+    #   if @board.at([@position[0] - 1, @position[1] + 1]) != "-"
+    #     @moves << [@position[0] - 1, @position[1] + 1]
+    #   end
+
+    # elsif @icons == Chess.icons[:white][:rook]
+
+    #   puts "hello!"
+      
+
+    # end
 
   end
 
@@ -152,3 +186,66 @@ class Piece
   end
 
 end
+
+# # top
+      # for i in 1..7
+
+      #   pos = [position[0] + i, @position[1]]
+
+      #   # range check
+      #   if pos[0] >= 8 || pos[0] < 0
+      #     break
+      #   end
+
+      #   if @board.at(pos) != "-"
+      #     @moves << pos
+      #     break
+      #   else
+      #     @moves << pos
+      #   end
+
+        
+
+      # end
+
+      # # # right
+      # # for i in 1..7
+
+      # #   pos = [position[0], @position[1] + i]
+
+      # #   if @board.at(pos).to_s != "-"
+      # #     @moves << pos
+      # #     break
+      # #   else
+      # #     @moves << pos
+      # #   end
+
+      # # end
+
+      # # # bottom
+      # # for i in 1..7
+
+      # #   pos = [position[0] - i, @position[1]]
+
+      # #   if @board.at(pos).to_s != "-"
+      # #     @moves << pos
+      # #     break
+      # #   else
+      # #     @moves << pos
+      # #   end
+
+      # # end
+
+      # # # left
+      # # for i in 1..7
+
+      # #   pos = [position[0], @position[1] - i]
+
+      # #   if @board.at(pos).to_s != "-"
+      # #     @moves << pos
+      # #     break
+      # #   else
+      # #     @moves << pos
+      # #   end
+
+      # # end
