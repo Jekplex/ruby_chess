@@ -86,6 +86,8 @@ class Board
 
   def print_moves_for(board_pos)
 
+    #update_board_on_all_pieces
+
     # converts boardpos to arraypos
     real_pos = boardpos_to_arraypos(board_pos)
 
@@ -100,37 +102,34 @@ class Board
     # update the selected piece moves
     @temp[real_pos[0]][real_pos[1]].build_moves
     
+    #p @temp[real_pos[0]][real_pos[1]].moves
+
+    to_be_deleted = []
+
     @temp[real_pos[0]][real_pos[1]].moves.each do |pos|
       
       # check if space is available
 
-      if @temp[pos[0]][pos[1]] != "-"
+      if @temp[pos[0]][pos[1]].to_s != "-"
         if @temp[pos[0]][pos[1]].color_sym == @temp[real_pos[0]][real_pos[1]].color_sym
           @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.blue
-          @temp[real_pos[0]][real_pos[1]].moves.delete(pos)
+          #@temp[real_pos[0]][real_pos[1]].moves.delete(pos)
+          to_be_deleted << pos
         else
-          @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red
+          @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red # enemy
         end
       else
-        @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red
+        @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red # free position
       end
-
-      # OLD
-      # begin
-      #   if @temp[pos[0]][pos[1]] != "-"
-      #     if @temp[pos[0]][pos[1]].color_sym == @temp[real_pos[0]][real_pos[1]].color_sym
-      #       @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.blue
-      #     else
-      #       @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red
-      #     end
-      #   else
-      #     @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red
-      #   end
-      # rescue => exception
-      #   # ??
-      # end
     
     end
+
+    # delete all the friendly positions so that player cannot kill allies
+    to_be_deleted.each do |pos|
+      @temp[real_pos[0]][real_pos[1]].moves.delete(pos)
+    end
+
+    #p @temp[real_pos[0]][real_pos[1]].moves   
 
     # highlight selected piece
     @temp[real_pos[0]][real_pos[1]] = @temp[real_pos[0]][real_pos[1]].to_s.yellow
@@ -161,7 +160,8 @@ class Board
     piece.position = new_datapos
 
     # set piece back into play
-    @data[new_datapos[0]][new_datapos[1]] = piece
+    #@data[new_datapos[0]][new_datapos[1]] = piece
+    place_in(piece)
 
     # update all boards
     update_board_on_all_pieces

@@ -84,7 +84,7 @@ class Piece
 
     when Chess.icons[:white][:rook], Chess.icons[:black][:rook]
 
-      # top
+      # north
       for i in 1..7
         pos = [position[0] + i, @position[1]]
         # range check
@@ -99,9 +99,24 @@ class Piece
         end
       end
 
-      # down
-      for i in 1..7
-        pos = [position[0] - i, @position[1]]
+      # east
+      for j in 1..7
+        pos = [position[0], @position[1] + j]
+        # range check
+        if pos[1] > 7
+          next
+        end
+        if @board.at(pos).to_s != "-"
+          @moves << pos
+          break
+        else
+          @moves << pos
+        end
+      end
+
+      # south
+      for k in 1..7
+        pos = [position[0] - k, @position[1]]
         # range check
         if pos[0] < 0
           next
@@ -114,70 +129,24 @@ class Piece
         end
       end
 
+      # west
+      for l in 1..7
+        pos = [position[0], @position[1] - l]
+        # range check
+        if pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-"
+          @moves << pos
+          break
+        else
+          @moves << pos
+        end
+      end
+
+      #p @moves
 
     end
-
-    # if @icon == Chess.icons[:white][:king] || @icon == Chess.icons[:black][:king]
-
-    #   @moves << [@position[0] - 1, @position[1] + 1]
-    #   @moves << [@position[0], @position[1] + 1]
-    #   @moves << [@position[0] + 1, @position[1] + 1]
-    #   @moves << [@position[0] - 1, @position[1]]
-    #   @moves << [@position[0] + 1, @position[1]]
-    #   @moves << [@position[0] - 1, @position[1] - 1]
-    #   @moves << [@position[0], @position[1] - 1]
-    #   @moves << [@position[0] + 1, @position[1] - 1]
-
-    #   @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
-
-    # elsif @icon == Chess.icons[:white][:pawn]
-      
-    #   for i in 0..7
-    #     if @position == [1, i]
-    #       @moves << [2, i]
-    #       @moves << [3, i]
-    #     end
-    #   end
-
-    #   if @moves == [] && @board.at([@position[0] + 1, @position[1]]) == "-"
-    #     @moves << [@position[0] + 1, @position[1]]
-    #   end
-
-    #   # pawn attack [white]
-    #   if @board.at([@position[0] + 1, @position[1] + 1]) != "-"
-    #     @moves << [@position[0] + 1, @position[1] + 1]
-    #   end
-    #   if @board.at([@position[0] + 1, @position[1] - 1]) != "-"
-    #     @moves << [@position[0] + 1, @position[1] - 1]
-    #   end
-
-    # elsif @icon == Chess.icons[:black][:pawn]
-
-    #   for i in 0..7
-    #     if @position == [6, i]
-    #       @moves << [5, i]
-    #       @moves << [4, i]
-    #     end
-    #   end
-
-    #   if @moves == [] && @board.at([@position[0] - 1, @position[1]]) == "-"
-    #     @moves << [@position[0] - 1, @position[1]]
-    #   end
-
-    #   # pawn attack [black]
-    #   if @board.at([@position[0] - 1, @position[1] - 1]) != "-"
-    #     @moves << [@position[0] - 1, @position[1] - 1]
-    #   end
-    #   if @board.at([@position[0] - 1, @position[1] + 1]) != "-"
-    #     @moves << [@position[0] - 1, @position[1] + 1]
-    #   end
-
-    # elsif @icons == Chess.icons[:white][:rook]
-
-    #   puts "hello!"
-      
-
-    # end
 
   end
 
@@ -186,66 +155,3 @@ class Piece
   end
 
 end
-
-# # top
-      # for i in 1..7
-
-      #   pos = [position[0] + i, @position[1]]
-
-      #   # range check
-      #   if pos[0] >= 8 || pos[0] < 0
-      #     break
-      #   end
-
-      #   if @board.at(pos) != "-"
-      #     @moves << pos
-      #     break
-      #   else
-      #     @moves << pos
-      #   end
-
-        
-
-      # end
-
-      # # # right
-      # # for i in 1..7
-
-      # #   pos = [position[0], @position[1] + i]
-
-      # #   if @board.at(pos).to_s != "-"
-      # #     @moves << pos
-      # #     break
-      # #   else
-      # #     @moves << pos
-      # #   end
-
-      # # end
-
-      # # # bottom
-      # # for i in 1..7
-
-      # #   pos = [position[0] - i, @position[1]]
-
-      # #   if @board.at(pos).to_s != "-"
-      # #     @moves << pos
-      # #     break
-      # #   else
-      # #     @moves << pos
-      # #   end
-
-      # # end
-
-      # # # left
-      # # for i in 1..7
-
-      # #   pos = [position[0], @position[1] - i]
-
-      # #   if @board.at(pos).to_s != "-"
-      # #     @moves << pos
-      # #     break
-      # #   else
-      # #     @moves << pos
-      # #   end
-
-      # # end
