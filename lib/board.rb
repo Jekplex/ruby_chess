@@ -7,7 +7,7 @@ class Board
     @temp = []
   end
 
-  def update_board_on_pieces
+  def update_board_on_all_pieces
     @data.each do |row|
       row.each do |item|
         if item == "-"
@@ -147,7 +147,7 @@ class Board
   def move(old_boardpos, new_boardpos)
     
     # update board on all pieces
-    update_board_on_pieces
+    update_board_on_all_pieces
 
     # grab selected piece
     old_datapos = boardpos_to_arraypos(old_boardpos)
@@ -164,7 +164,7 @@ class Board
     @data[new_datapos[0]][new_datapos[1]] = piece
 
     # update all boards
-    update_board_on_pieces
+    update_board_on_all_pieces
 
     # used to check if board updates on all pieces correctly.
     #@data[new_datapos[0]][new_datapos[1]].board.print_board
