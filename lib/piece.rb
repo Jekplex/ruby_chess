@@ -146,6 +146,42 @@ class Piece
 
       #p @moves
 
+    when Chess.icons[:white][:knight], Chess.icons[:black][:knight]
+
+      (0...8).each do |i|
+
+        case i
+        when 0
+          @moves << [@position[0] + 1, @position[1] + 2]
+        when 1
+          @moves << [@position[0] + 1, @position[1] - 2]
+        when 2
+          @moves << [@position[0] - 1, @position[1] + 2]
+        when 3
+          @moves << [@position[0] - 1, @position[1] - 2]
+        when 4
+          @moves << [@position[0] + 2, @position[1] + 1]
+        when 5
+          @moves << [@position[0] - 2, @position[1] + 1]
+        when 6
+          @moves << [@position[0] + 2, @position[1] - 1]
+        when 7
+          @moves << [@position[0] - 2, @position[1] - 1]
+        else
+          puts 'error!'
+        end
+
+      end
+
+      # remove any outlayers based on size of board
+      marked = []
+      @moves.each do |pos|
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          marked << pos
+        end
+      end
+      @moves.delete_if { |move| marked.include?(move) }
+
     end
 
   end
