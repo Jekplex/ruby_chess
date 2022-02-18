@@ -182,6 +182,65 @@ class Piece
       end
       @moves.delete_if { |move| marked.include?(move) }
 
+    when Chess.icons[:white][:bishop], Chess.icons[:black][:bishop]
+
+      # top right
+      for i in 1..7
+        pos = [@position[0] + i, @position[1] + i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # top left
+      for i in 1..7
+        pos = [@position[0] + i, @position[1] - i]
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # bottom left
+      for i in 1..7
+        pos = [@position[0] - i, @position[1] - i]
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # bottom right
+      for i in 1..7
+        pos = [@position[0] - i, @position[1] + i]
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
     end
 
   end
