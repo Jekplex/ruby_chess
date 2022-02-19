@@ -241,6 +241,128 @@ class Piece
         end
       end
 
+    when Chess.icons[:white][:queen], Chess.icons[:black][:queen]
+
+      # n
+      for i in 1..7
+        pos = [position[0] + i, @position[1]]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-"
+          @moves << pos
+          break
+        else
+          @moves << pos
+        end
+      end
+
+      # ne
+      for i in 1..7
+        pos = [@position[0] + i, @position[1] + i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # e
+      for i in 1..7
+        pos = [position[0], @position[1] + i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-"
+          @moves << pos
+          break
+        else
+          @moves << pos
+        end
+      end
+
+      # se
+      for i in 1..7
+        pos = [@position[0] - i, @position[1] + i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # s
+      for i in 1..7
+        pos = [@position[0] - i, @position[1]]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # sw
+      for i in 1..7
+        pos = [@position[0] - i, @position[1] - i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # w
+      for i in 1..7
+        pos = [@position[0], @position[1] - i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
+      # nw
+      for i in 1..7
+        pos = [@position[0] + i, @position[1] - i]
+        # range check
+        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+          next
+        end
+        if @board.at(pos).to_s != "-" # if piece is present at position...
+          moves << pos
+          break
+        else
+          moves << pos
+        end
+      end
+
     end
 
   end
