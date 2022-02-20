@@ -61,6 +61,8 @@ class Piece
         @moves << [@position[0] + 1, @position[1] - 1]
       end
 
+      @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+
     when Chess.icons[:black][:pawn]
 
       for i in 0..7
