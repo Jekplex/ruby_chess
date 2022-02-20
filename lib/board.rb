@@ -2,6 +2,8 @@ require 'colorize'
 
 class Board
   
+  attr_reader :data, :temp
+
   def initialize
     @data = Array.new(8) { Array.new(8, "-") }
     @temp = []
@@ -175,6 +177,7 @@ class Board
 
   def place_in(piece)
     @data[piece.position[0].to_i][piece.position[1].to_i] = piece
+    update_board_on_all_pieces
   end
 
   private
