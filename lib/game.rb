@@ -39,13 +39,11 @@ class Game
   def piece_select
     
     puts ""
-
     @board.print_board
-
     puts ""
+
     puts "Player #{@player+1}"
     puts "Select a piece... For example: 'e2'"
-
     selected_piece_pos = gets.chomp
 
     puts ""
