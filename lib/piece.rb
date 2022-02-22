@@ -23,7 +23,7 @@ class Piece
 
     # build moves depending on type and color and position and board
     
-    # this is probably going to be the longest if statement man has ever seen. lulz
+    # this is probably going to be the longest case statement man has ever seen. lulz
 
     case @icon
 
@@ -83,6 +83,8 @@ class Piece
       if @board.at([@position[0] - 1, @position[1] + 1]) != "-"
         @moves << [@position[0] - 1, @position[1] + 1]
       end
+
+      @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
 
     when Chess.icons[:white][:rook], Chess.icons[:black][:rook]
 
