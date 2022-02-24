@@ -19,6 +19,9 @@ class Board
         end
       end
     end
+
+    calc_moves_for_all_pieces
+    
   end
 
   def print_board
@@ -178,6 +181,16 @@ class Board
   def place_in(piece)
     @data[piece.position[0].to_i][piece.position[1].to_i] = piece
     update_board_on_all_pieces
+  end
+
+  def calc_moves_for_all_pieces
+    for i in 0..7
+      for j in 0..7
+        if at([i, j]).to_s != "-" # if is piece
+          at([i, j]).build_moves
+        end
+      end
+    end
   end
 
   private
