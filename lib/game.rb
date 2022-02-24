@@ -5,7 +5,10 @@ class Game
   attr_accessor :board
 
   def initialize(clean_board)
+    
     @board = setup_board(clean_board)
+    #@board = clean_board # for testing
+    
     @player = 0
   end
 
@@ -30,6 +33,36 @@ class Game
 
   def game_over?
     false
+  end
+
+  def king_in_check?
+
+    # loop through every piece and check if it's moves contains an opposite coloured king.
+    # if true, return true else return false.
+
+    for i in 0..7
+      for j in 0..7
+        if @board.at([i, j]).to_s == "-"
+          next
+        else
+          @board.at([i, j]).moves.each do |target|
+            if @board.at(target).to_s == "-"
+              next
+            else
+              if @board.at(target).color_sym != @board.at([i, j]).color_sym && @board.at(target).type_sym == :king
+                return true
+              else
+                next
+              end
+            end
+          end
+        end
+      end
+    end
+    false
+
+    
+
   end
 
   def game_loop
