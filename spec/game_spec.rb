@@ -17,7 +17,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             pawn = Piece.new(:pawn, :black, [4,4], board)
@@ -35,7 +35,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             pawn = Piece.new(:pawn, :black, [5,4], board)
@@ -57,7 +57,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             knight = Piece.new(:knight, :black, [4,5], board)
@@ -75,7 +75,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             knight = Piece.new(:knight, :black, [0,0], board)
@@ -97,7 +97,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             bishop = Piece.new(:bishop, :black, [7,7], board)
@@ -115,7 +115,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             bishop = Piece.new(:bishop, :black, [1,2], board)
@@ -137,7 +137,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             rook = Piece.new(:rook, :black, [7,3], board)
@@ -155,7 +155,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             rook = Piece.new(:rook, :black, [2,2], board)
@@ -177,7 +177,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             queen = Piece.new(:queen, :black, [1,1], board)
@@ -195,7 +195,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :white, [3,3], board)
             queen = Piece.new(:queen, :black, [4,5], board)
@@ -220,7 +220,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             pawn = Piece.new(:pawn, :white, [2,2], board)
@@ -238,7 +238,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             pawn = Piece.new(:pawn, :white, [0,0], board)
@@ -260,7 +260,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             knight = Piece.new(:knight, :white, [4,5], board)
@@ -278,7 +278,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             knight = Piece.new(:knight, :white, [0,0], board)
@@ -300,7 +300,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             bishop = Piece.new(:bishop, :white, [7,7], board)
@@ -318,7 +318,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             bishop = Piece.new(:bishop, :white, [1,2], board)
@@ -340,7 +340,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             rook = Piece.new(:rook, :white, [7,3], board)
@@ -358,7 +358,7 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             rook = Piece.new(:rook, :white, [2,2], board)
@@ -380,7 +380,7 @@ describe Game do
           it "return true" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             queen = Piece.new(:queen, :white, [1,1], board)
@@ -398,13 +398,15 @@ describe Game do
           it "return false" do
 
             board = Board.new
-            game = Game.new(board)
+            game = Game.new(board, false)
     
             king = Piece.new(:king, :black, [3,3], board)
             queen = Piece.new(:queen, :white, [4,5], board)
     
             board.place_in(king)
             board.place_in(queen)
+
+            board.print_board
     
             result = game.king_in_check?
             expect(result).to eq(false)

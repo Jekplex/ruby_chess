@@ -1,5 +1,6 @@
 require_relative 'chess'
 require_relative 'board'
+require_relative 'game'
 
 class Piece 
 
@@ -22,13 +23,13 @@ class Piece
     @moves = []
 
     # build moves depending on type and color and position and board
-    
     # this is probably going to be the longest case statement man has ever seen. lulz
 
     case @icon
 
     when Chess.icons[:white][:king], Chess.icons[:black][:king]
 
+      # grabs all positions around the king's current position
       @moves << [@position[0] - 1, @position[1] + 1]
       @moves << [@position[0], @position[1] + 1]
       @moves << [@position[0] + 1, @position[1] + 1]
@@ -38,7 +39,37 @@ class Piece
       @moves << [@position[0], @position[1] - 1]
       @moves << [@position[0] + 1, @position[1] - 1]
 
+      # delete out of bounds
       @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+
+      # delete allies
+      to_be_deleted = []
+      @moves.each do |pos|
+        if @board.at(pos).to_s == "-"
+          next
+        else
+          if @color_sym == @board.at(pos).color_sym 
+            to_be_deleted << pos
+          end
+        end
+      end
+      to_be_deleted.each { |pos| @moves.delete(pos) }
+
+      # delete any moves that causes a self check
+      # ... tbc
+      
+      # to_be_deleted = []
+      # starting_board = @board.data.map(&:clone)
+      # @moves.each do |pos|
+      #   #@board.arraypos_to_boardpos(@position)
+      #   @board.move(@board.arraypos_to_boardpos(@position), @board.arraypos_to_boardpos(pos))
+      #   # check each enemy piece to see if alied king is being attacked.
+      #   if Game.king_in_check?(@color_sym, @board)
+      #     to_be_deleted << pos
+      #   end
+      #   @board = starting_board.map(&:clone) # reset @board simulation
+      # end
+      # to_be_deleted.each { |pos| @moves.delete(pos) }
 
     when Chess.icons[:white][:pawn]
 
