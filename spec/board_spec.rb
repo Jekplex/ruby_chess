@@ -1,41 +1,51 @@
-#spec/board_spec.rb
+# spec/board_spec.rb
 
-# require_relative "../lib/board"
-# require_relative "../lib/piece"
+require_relative "../lib/board"
+require_relative "../lib/piece"
 
-# describe Board do
+describe Board do
 
-#   subject(:board) { described_class.new() }
-
-#   describe "#print_moves_for" do
+  describe "#arraypos_to_boardpos" do
     
-#     context 'white pawn' do
+    context "when given 0,0" do
+      it "returns 'a1'" do
 
-#       context 'at 1,0' do
-#         it 'should show 2,0 and 3,0 as moves' do
-          
-#           w_pawn = Piece.new(:pawn, :white, [1,0], board)
-#           board.place_in(w_pawn) # automatically updates board on all pieces
+        board = Board.new()
+        result = board.arraypos_to_boardpos([0,0])
+        expect(result).to eq("a1")
 
-#           piece = board.at([1,0])
-#           piece.build_moves
-#           expect(piece.moves).to eq([[2,0],[3,0]])
-          
-#         end
+      end
+    end
 
-#         it 'should show moves positions as red on @temp' do
-#           board.print_moves_for("a2")
-          
-#           p board.temp[2][0].to_s
-#           p board.temp[3][0].to_s
-#           #p String.colors.find{|x| .colorize(x) === board.temp[2][0].to_s}
-#         end
+    context "when given 3,3" do
+      it "returns 'd4'" do
 
-        
+        board = Board.new()
+        result = board.arraypos_to_boardpos([3,3])
+        expect(result).to eq("d4")
 
-#       end
+      end
+    end
 
-#     end
+    context "when given 7,7" do
+      it "returns 'h8'" do
 
-#   end
-# end
+        board = Board.new()
+        result = board.arraypos_to_boardpos([7,7])
+        expect(result).to eq("h8")
+
+      end
+    end
+
+    context "when given 1,6" do
+      it "returns 'g2'" do
+
+        board = Board.new()
+        result = board.arraypos_to_boardpos([1,6])
+        expect(result).to eq("g2")
+
+      end
+    end
+
+  end
+end

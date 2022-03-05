@@ -9,7 +9,14 @@ class Board
     @temp = []
   end
 
-  def update_board_on_all_pieces
+  def update_board_and_moves_on_all_pieces
+    
+    update_board_for_all_pieces
+    calc_moves_for_all_pieces
+    
+  end
+
+  def update_board_for_all_pieces
     @data.each do |row|
       row.each do |item|
         if item == "-"
@@ -19,9 +26,6 @@ class Board
         end
       end
     end
-
-    calc_moves_for_all_pieces
-    
   end
 
   def print_board
@@ -66,6 +70,20 @@ class Board
     y = letter_pos_to_data_pos(board_pos[0])
     return [x, y]
   
+  end
+
+  def arraypos_to_boardpos(array_pos)
+    
+    if array_pos.length != 2
+      return nil
+    end
+
+    out_string = ""
+    out_string += data_pos_to_letter_pos(array_pos[1]).to_s
+    out_string += (array_pos[0] + 1).to_s
+    #p out_string
+    out_string
+
   end
 
   def validate_boardpos_string(board_pos)
@@ -151,7 +169,7 @@ class Board
   def move(old_boardpos, new_boardpos)
     
     # update board on all pieces
-    update_board_on_all_pieces
+    update_board_and_moves_on_all_pieces
 
     # grab selected piece
     old_datapos = boardpos_to_arraypos(old_boardpos)
@@ -169,7 +187,7 @@ class Board
     place_in(piece)
 
     # update all boards
-    update_board_on_all_pieces
+    update_board_and_moves_on_all_pieces
 
     # used to check if board updates on all pieces correctly.
     #@data[new_datapos[0]][new_datapos[1]].board.print_board
@@ -180,7 +198,7 @@ class Board
 
   def place_in(piece)
     @data[piece.position[0].to_i][piece.position[1].to_i] = piece
-    update_board_on_all_pieces
+    update_board_and_moves_on_all_pieces
   end
 
   def calc_moves_for_all_pieces
@@ -196,6 +214,7 @@ class Board
   private
 
   def letter_pos_to_data_pos(char)
+
     case char
       when "a"
         return 0
@@ -214,6 +233,30 @@ class Board
       when "h"
         return 7
     end
+
+  end
+
+  def data_pos_to_letter_pos(num)
+
+    case num
+      when 0
+        return "a"
+      when 1
+        return "b"
+      when 2
+        return "c"
+      when 3
+        return "d"
+      when 4
+        return "e"
+      when 5
+        return "f"
+      when 6
+        return "g"
+      when 7
+        return "h"
+    end
+
   end
 
 end
