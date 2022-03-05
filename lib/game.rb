@@ -4,12 +4,16 @@ class Game
 
   attr_accessor :board
 
-  def initialize(clean_board)
+  def initialize(board, bool_setup_board)
     
-    @board = setup_board(clean_board)
-    #@board = clean_board # for testing
+    if bool_setup_board
+      @board = setup_board(board)
+    else
+      @board = board
+    end
     
     @player = 0
+
   end
 
   # player vs play
@@ -35,33 +39,105 @@ class Game
     false
   end
 
-  def king_in_check?
+  def king_in_check?(king_color = nil)
 
     # loop through every piece and check if it's moves contains an opposite coloured king.
     # if true, return true else return false.
 
-    for i in 0..7
-      for j in 0..7
-        if @board.at([i, j]).to_s == "-"
-          next
-        else
-          @board.at([i, j]).moves.each do |target|
-            if @board.at(target).to_s == "-"
-              next
-            else
-              if @board.at(target).color_sym != @board.at([i, j]).color_sym && @board.at(target).type_sym == :king
-                return true
-              else
+    if king_color != nil 
+      for i in 0..7
+        for j in 0..7
+          if @board.at([i, j]).to_s == "-"
+            next
+          else
+            @board.at([i, j]).moves.each do |target|
+              if @board.at(target).to_s == "-"
                 next
+              else
+                if @board.at(target).color_sym == king_color && @board.at(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
               end
             end
           end
         end
       end
-    end
-    false
+      false
+    else
+      for i in 0..7
+        for j in 0..7
+          if @board.at([i, j]).to_s == "-"
+            next
+          else
+            @board.at([i, j]).moves.each do |target|
+              if @board.at(target).to_s == "-"
+                next
+              else
+                if @board.at(target).color_sym != @board.at([i, j]).color_sym && @board.at(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
+              end
+            end
+          end
+        end
+      end
+      false
+    end   
 
-    
+  end
+
+  def self.king_in_check?(king_color = nil, board)
+
+    # loop through every piece and check if it's moves contains an opposite coloured king.
+    # if true, return true else return false.
+
+    if king_color != nil
+      for i in 0..7
+        for j in 0..7
+          if board.at([i, j]).to_s == "-"
+            next
+          else
+            board.at([i, j]).moves.each do |target|
+              if board.at(target).to_s == "-"
+                next
+              else
+                if board.at(target).color_sym == king_color && board.at(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
+              end
+            end
+          end
+        end
+      end
+      false
+    else
+      for i in 0..7
+        for j in 0..7
+          if board.at([i, j]).to_s == "-"
+            next
+          else
+            board.at([i, j]).moves.each do |target|
+              if board.at(target).to_s == "-"
+                next
+              else
+                if board.at(target).color_sym != board.at([i, j]).color_sym && board.at(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
+              end
+            end
+          end
+        end
+      end
+      false
+    end   
 
   end
 
@@ -85,8 +161,14 @@ class Game
 
     # i need to validate color of piece with player
 
-    if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player
+    if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
       # good input
+
+      # good input but no moves
+      if @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).moves == []
+        puts "Error! This piece has no available moves. Please try again.".red
+        piece_select
+      end
 
       # grab piece
       selected_piece = @board.at(@board.boardpos_to_arraypos(selected_piece_pos))
