@@ -17,6 +17,39 @@ class Piece
     build_moves
   end
 
+  # def delete_moves_that_cause_self_check
+  #   # to_be_deleted = []
+  #   # starting_board = @board.data.map(&:clone)
+  #   # @moves.each do |pos|
+  #   #   #@board.arraypos_to_boardpos(@position)
+  #   #   @board.move(@board.arraypos_to_boardpos(@position), @board.arraypos_to_boardpos(pos))
+  #   #   # check each enemy piece to see if alied king is being attacked.
+  #   #   if Game.king_in_check?(@color_sym, @board)
+  #   #     to_be_deleted << pos
+  #   #   end
+  #   #   @board = starting_board.map(&:clone) # reset @board simulation
+  #   # end
+  #   # to_be_deleted.each { |pos| @moves.delete(pos) }
+
+  #   to_be_deleted = []
+  #   sim_board = Board.new(@board)
+  #   #sim_board.place_in(self)
+
+  #   # for each position do a simulation...
+  #   @moves.each do |pos|
+  #     piece_boardpos = sim_board.arraypos_to_boardpos(@position)
+  #     target_boardpos = sim_board.arraypos_to_boardpos(pos)
+  #     sim_board.move(piece_boardpos, target_boardpos)
+
+  #     if Game.king_in_check?(@color_sym, sim_board)
+  #       to_be_deleted << pos
+  #     end
+  #     sim_board = Board.new(@board) # reset board for next simulation
+  #   end
+  #   to_be_deleted.each { |pos| @moves.delete(pos) }
+
+  # end
+
   def build_moves
 
     # reset moves
@@ -55,21 +88,12 @@ class Piece
       end
       to_be_deleted.each { |pos| @moves.delete(pos) }
 
-      # delete any moves that causes a self check
+      # delete any moves that causes a self check...
       # ... tbc
+      # delete_moves_that_cause_self_check
+      # .. i've tried to code the solution here but it seems to mess everything up
+      # i think the solution for this must be built in board.rb
       
-      # to_be_deleted = []
-      # starting_board = @board.data.map(&:clone)
-      # @moves.each do |pos|
-      #   #@board.arraypos_to_boardpos(@position)
-      #   @board.move(@board.arraypos_to_boardpos(@position), @board.arraypos_to_boardpos(pos))
-      #   # check each enemy piece to see if alied king is being attacked.
-      #   if Game.king_in_check?(@color_sym, @board)
-      #     to_be_deleted << pos
-      #   end
-      #   @board = starting_board.map(&:clone) # reset @board simulation
-      # end
-      # to_be_deleted.each { |pos| @moves.delete(pos) }
 
     when Chess.icons[:white][:pawn]
 

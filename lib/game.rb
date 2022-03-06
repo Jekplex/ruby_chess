@@ -8,6 +8,7 @@ class Game
     
     if bool_setup_board
       @board = setup_board(board)
+      @board.update_board_and_moves_on_all_pieces
     else
       @board = board
     end
@@ -90,7 +91,7 @@ class Game
 
   end
 
-  def self.king_in_check?(king_color = nil, board)
+  def Game.king_in_check?(king_color = nil, board)
 
     # loop through every piece and check if it's moves contains an opposite coloured king.
     # if true, return true else return false.
@@ -127,6 +128,57 @@ class Game
                 next
               else
                 if board.at(target).color_sym != board.at([i, j]).color_sym && board.at(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
+              end
+            end
+          end
+        end
+      end
+      false
+    end   
+
+  end
+
+  def Game.king_in_check?(king_color = nil, board)
+
+    # loop through every piece and check if it's moves contains an opposite coloured king.
+    # if true, return true else return false.
+
+    if king_color != nil
+      for i in 0..7
+        for j in 0..7
+          if board.at_temp([i, j]).to_s == "-"
+            next
+          else
+            board.at_temp([i, j]).moves.each do |target|
+              if board.at_temp(target).to_s == "-"
+                next
+              else
+                if board.at_temp(target).color_sym == king_color && board.at_temp(target).type_sym == :king
+                  return true
+                else
+                  next
+                end
+              end
+            end
+          end
+        end
+      end
+      false
+    else
+      for i in 0..7
+        for j in 0..7
+          if board.at_temp([i, j]).to_s == "-"
+            next
+          else
+            board.at_temp([i, j]).moves.each do |target|
+              if board.at_temp(target).to_s == "-"
+                next
+              else
+                if board.at_temp(target).color_sym != board.at_temp([i, j]).color_sym && board.at_temp(target).type_sym == :king
                   return true
                 else
                   next
