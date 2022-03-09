@@ -4,6 +4,10 @@ class Board
   
   attr_reader :data, :temp
 
+  def get_data
+    return @data
+  end
+
   def initialize(board_template = nil)
 
     if board_template != nil
@@ -19,7 +23,7 @@ class Board
   def update_board_and_moves_on_all_pieces
     
     update_board_for_all_pieces
-    calc_moves_for_all_pieces
+    update_moves_for_all_pieces
     
   end
 
@@ -114,75 +118,68 @@ class Board
 
   end
 
-  def print_moves_for(board_pos)
+  def remove_self_checking_moves(piece)
 
-    update_board_for_all_pieces
+    # we want to test out each move
+    # by moving the piece to the new slot
+    # and checking if that causes a self check
+    # if it does, remove that piece from @moves
+    # if it does not, then keep it.
 
-    # converts boardpos to arraypos
-    real_pos = boardpos_to_arraypos(board_pos)
-
-    # exits if position given is not a piece
-    if @data[real_pos[0]][real_pos[1]] == "-"
-      return "error"
-    end
-
-    # update the selected piece moves
-    @data[real_pos[0]][real_pos[1]].build_moves
-
-    # makes a deep copy of @data in @temp
-    @temp = @data.map(&:clone)
-
-    # # update the selected piece moves
-    # @temp[real_pos[0]][real_pos[1]].build_moves
+    og_moves = piece.moves.map(&:clone)
+    og_sim_board = Board.new(piece.board)
+    sim_board = Board.new(og_sim_board)
 
     to_be_deleted = []
 
-    og_moves = @data[real_pos[0]][real_pos[1]].moves
+    og_position = piece.position
 
-    # for all generated moves... # REMOVES ALL MOVES THAT CAUSES SELF CHECK
-    @data[real_pos[0]][real_pos[1]].moves.each do |pos|
-      
-      # simulate each move
-      # and if the move causes a self check, mark for deletion.
+    og_moves.each do |move|
 
-      # execute
-      piece_boardpos = board_pos
-      target_boardpos = arraypos_to_boardpos(pos)
-      move_temp(piece_boardpos, target_boardpos)
+      sim_board.get_data[piece.position[0]][piece.position[1]] = "-"
+      piece.position = move
+      sim_board.place_in(piece)
+      sim_board.update_board_for_all_pieces
+      sim_board.update_moves_for_all_pieces
 
-      # the check
-      if Game.king_in_check?(@color_sym, self)
-        to_be_deleted << pos
+      if Game.king_in_check?(piece.color_sym, sim_board)
+        to_be_deleted << move
       end
 
       # reset
-      @temp = @data.map(&:clone) # reset board for next simulation
-    
+      board = Board.new(og_sim_board)
+      piece.position = og_position
+      piece.moves = og_moves
+      
     end
 
-    # OG MOVES IS A PATCH THAT SOMEHOW WORKS ¯\_(ツ)_/¯
-
-    #p og_moves 
-    @temp[real_pos[0]][real_pos[1]].moves = og_moves
-
-    # delete all the moves that causes self checks
+    # delete moves that cause self check
     to_be_deleted.each do |pos|
-      @temp[real_pos[0]][real_pos[1]].moves.delete(pos)
+      piece.moves.delete(pos)
     end
 
-    #p @temp[real_pos[0]][real_pos[1]]
+  end
 
+  def color_moves_on_temp(piece)
 
-    # for all generated moves...
-    @temp[real_pos[0]][real_pos[1]].moves.each do |pos|
+    # deep copy
+    @temp = @data.map(&:clone)
+    temp_piece = @temp[piece.position[0]][piece.position[1]]
+
+    to_be_deleted = []
+
+    # assuming given piece moves are all valid...
+
+    # for all valid moves...
+    temp_piece.moves.each do |pos|
       
       # check if space is available
 
-      if @temp[pos[0]][pos[1]].to_s != "-"
-        if @temp[pos[0]][pos[1]].color_sym == @temp[real_pos[0]][real_pos[1]].color_sym
+      if @temp[pos[0]][pos[1]].to_s != "-" # position is filled
+        if @temp[pos[0]][pos[1]].color_sym == temp_piece.color_sym # check if ally
           @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.blue
           #@temp[real_pos[0]][real_pos[1]].moves.delete(pos)
-          to_be_deleted << pos
+          to_be_deleted << pos # remove from 
         else
           @temp[pos[0]][pos[1]] = @temp[pos[0]][pos[1]].to_s.red # enemy
         end
@@ -194,14 +191,43 @@ class Board
 
     # delete all the friendly positions so that player cannot kill allies
     to_be_deleted.each do |pos|
-      @temp[real_pos[0]][real_pos[1]].moves.delete(pos)
+      temp_piece.moves.delete(pos)
     end
 
     # highlight selected piece
-    @temp[real_pos[0]][real_pos[1]] = @temp[real_pos[0]][real_pos[1]].to_s.yellow
+    @temp[piece.position[0]][piece.position[1]] = @temp[piece.position[0]][piece.position[1]].to_s.yellow
 
-    # print board
+  end
+
+  def print_moves_for(board_pos)
+
+    update_board_for_all_pieces
+
+    # converts boardpos to arraypos
+    real_pos = boardpos_to_arraypos(board_pos)
+
+    # set piece on data
+    piece = @data[real_pos[0]][real_pos[1]]
+
+    # exits if position given is not a piece
+    if piece == "-"
+      return "error, the given board_pos does not lead to a piece instance"
+    end
+
+    # update the selected piece moves
+    piece.build_moves
+
+    remove_self_checking_moves(piece)
+
+    if piece.moves == []
+      return
+    end
+
+    color_moves_on_temp(piece)
+
+    # print temp
     print_temp
+    @temp = []
 
   end
 
@@ -260,7 +286,6 @@ class Board
     piece.position = new_datapos
 
     # set piece back into play
-    #@data[new_datapos[0]][new_datapos[1]] = piece
     place_in_temp(piece)
 
     # update all boards
@@ -275,15 +300,38 @@ class Board
 
   def place_in(piece)
     @data[piece.position[0].to_i][piece.position[1].to_i] = piece
-    update_board_and_moves_on_all_pieces
+    #update_board_and_moves_on_all_pieces
   end
 
   def place_in_temp(piece)
     @temp[piece.position[0].to_i][piece.position[1].to_i] = piece
-    update_board_and_moves_on_all_pieces
+    # update_board_on_all_pieces_temp
+    # update_moves_on_all_pieces_temp
   end
 
-  def calc_moves_for_all_pieces
+  def update_board_on_all_pieces_temp
+    @temp.each do |row|
+      row.each do |item|
+        if item == "-"
+          next
+        else
+          item.board = self
+        end
+      end
+    end
+  end
+
+  def update_moves_on_all_pieces_temp
+    for i in 0..7
+      for j in 0..7
+        if at_temp([i, j]).to_s != "-" # if is piece
+          at_temp([i, j]).build_moves
+        end
+      end
+    end
+  end
+
+  def update_moves_for_all_pieces
     for i in 0..7
       for j in 0..7
         if at([i, j]).to_s != "-" # if is piece

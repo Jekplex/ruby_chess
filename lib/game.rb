@@ -91,7 +91,7 @@ class Game
 
   end
 
-  def Game.king_in_check?(king_color = nil, board)
+  def self.king_in_check?(king_color = nil, board)
 
     # loop through every piece and check if it's moves contains an opposite coloured king.
     # if true, return true else return false.
@@ -106,7 +106,7 @@ class Game
               if board.at(target).to_s == "-"
                 next
               else
-                if board.at(target).color_sym == king_color && board.at(target).type_sym == :king
+                if board.at(target).color_sym == king_color && board.at(target).type_sym == :king && (board.at(target).icon != board.at([i, j]).icon)
                   return true
                 else
                   next
@@ -128,57 +128,6 @@ class Game
                 next
               else
                 if board.at(target).color_sym != board.at([i, j]).color_sym && board.at(target).type_sym == :king
-                  return true
-                else
-                  next
-                end
-              end
-            end
-          end
-        end
-      end
-      false
-    end   
-
-  end
-
-  def Game.king_in_check?(king_color = nil, board)
-
-    # loop through every piece and check if it's moves contains an opposite coloured king.
-    # if true, return true else return false.
-
-    if king_color != nil
-      for i in 0..7
-        for j in 0..7
-          if board.at_temp([i, j]).to_s == "-"
-            next
-          else
-            board.at_temp([i, j]).moves.each do |target|
-              if board.at_temp(target).to_s == "-"
-                next
-              else
-                if board.at_temp(target).color_sym == king_color && board.at_temp(target).type_sym == :king
-                  return true
-                else
-                  next
-                end
-              end
-            end
-          end
-        end
-      end
-      false
-    else
-      for i in 0..7
-        for j in 0..7
-          if board.at_temp([i, j]).to_s == "-"
-            next
-          else
-            board.at_temp([i, j]).moves.each do |target|
-              if board.at_temp(target).to_s == "-"
-                next
-              else
-                if board.at_temp(target).color_sym != board.at_temp([i, j]).color_sym && board.at_temp(target).type_sym == :king
                   return true
                 else
                   next
@@ -228,6 +177,11 @@ class Game
       # print movables for that position
       @board.print_moves_for(selected_piece_pos)
 
+      if selected_piece.moves == []
+        puts "Error! This piece has no available moves. Please try again.".red
+        return
+      end
+
       # select new pos
       puts ""
       puts "Player #{@player+1}"
@@ -245,9 +199,14 @@ class Game
         #pos = @board.boardpos_to_arraypos(new_pos)
         
         @board.move(selected_piece_pos, new_pos)
+        @board.update_board_and_moves_on_all_pieces
         switch_player
 
       else
+
+        if new_pos == "" # peaking
+          return
+        end
 
         # bad input
 

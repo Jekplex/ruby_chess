@@ -22,7 +22,7 @@ module Chess
     
   }
 
-  def Chess.icons
+  def self.icons
     ICONS
   end
 

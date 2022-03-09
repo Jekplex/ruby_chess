@@ -32,19 +32,19 @@ class Piece
   #   # to_be_deleted.each { |pos| @moves.delete(pos) }
 
   #   to_be_deleted = []
-  #   sim_board = Board.new(@board)
-  #   #sim_board.place_in(self)
+  #   board = Board.new(@board)
+  #   #board.place_in(self)
 
   #   # for each position do a simulation...
   #   @moves.each do |pos|
-  #     piece_boardpos = sim_board.arraypos_to_boardpos(@position)
-  #     target_boardpos = sim_board.arraypos_to_boardpos(pos)
-  #     sim_board.move(piece_boardpos, target_boardpos)
+  #     piece_boardpos = board.arraypos_to_boardpos(@position)
+  #     target_boardpos = board.arraypos_to_boardpos(pos)
+  #     board.move(piece_boardpos, target_boardpos)
 
-  #     if Game.king_in_check?(@color_sym, sim_board)
+  #     if Game.king_in_check?(@color_sym, board)
   #       to_be_deleted << pos
   #     end
-  #     sim_board = Board.new(@board) # reset board for next simulation
+  #     board = Board.new(@board) # reset board for next simulation
   #   end
   #   to_be_deleted.each { |pos| @moves.delete(pos) }
 
@@ -71,30 +71,7 @@ class Piece
       @moves << [@position[0] - 1, @position[1] - 1]
       @moves << [@position[0], @position[1] - 1]
       @moves << [@position[0] + 1, @position[1] - 1]
-
-      # delete out of bounds
-      @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
-
-      # delete allies
-      to_be_deleted = []
-      @moves.each do |pos|
-        if @board.at(pos).to_s == "-"
-          next
-        else
-          if @color_sym == @board.at(pos).color_sym 
-            to_be_deleted << pos
-          end
-        end
-      end
-      to_be_deleted.each { |pos| @moves.delete(pos) }
-
-      # delete any moves that causes a self check...
-      # ... tbc
-      # delete_moves_that_cause_self_check
-      # .. i've tried to code the solution here but it seems to mess everything up
-      # i think the solution for this must be built in board.rb
       
-
     when Chess.icons[:white][:pawn]
 
       for i in 0..7
@@ -116,7 +93,7 @@ class Piece
         @moves << [@position[0] + 1, @position[1] - 1]
       end
 
-      @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+      #@moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
 
     when Chess.icons[:black][:pawn]
 
@@ -139,7 +116,7 @@ class Piece
         @moves << [@position[0] - 1, @position[1] + 1]
       end
 
-      @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+      #@moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
 
     when Chess.icons[:white][:rook], Chess.icons[:black][:rook]
 
@@ -232,14 +209,14 @@ class Piece
 
       end
 
-      # remove any outlayers based on size of board
-      marked = []
-      @moves.each do |pos|
-        if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
-          marked << pos
-        end
-      end
-      @moves.delete_if { |move| marked.include?(move) }
+      # # remove any outlayers based on size of board
+      # marked = []
+      # @moves.each do |pos|
+      #   if pos[0] > 7 || pos[0] < 0 || pos[1] > 7 || pos[1] < 0
+      #     marked << pos
+      #   end
+      # end
+      # @moves.delete_if { |move| marked.include?(move) }
 
     when Chess.icons[:white][:bishop], Chess.icons[:black][:bishop]
 
@@ -423,6 +400,26 @@ class Piece
       end
 
     end
+
+    # delete any out of bounds
+    @moves.delete_if { |pos| pos[0] >= 8 || pos[0] < 0 || pos[1] >= 8 || pos[1] < 0 }
+
+    # delete any allies
+    to_be_deleted = []
+    @moves.each do |pos|
+      if @board.at(pos).to_s == "-"
+        next
+      else
+        if @color_sym == @board.at(pos).color_sym 
+          to_be_deleted << pos
+        end
+      end
+    end
+    to_be_deleted.each { |pos| @moves.delete(pos) }
+
+    # delete any moves that causes a self check...
+    # this solution could only be produced in board.rb
+    # go to board.rb for solution
 
   end
 
