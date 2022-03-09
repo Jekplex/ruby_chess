@@ -24,6 +24,8 @@ describe Game do
     
             board.place_in(king)
             board.place_in(pawn)
+
+            board.update_board_and_moves_on_all_pieces
     
             result = game.king_in_check?
             expect(result).to eq(true)
@@ -227,6 +229,7 @@ describe Game do
     
             board.place_in(king)
             board.place_in(pawn)
+            board.update_board_and_moves_on_all_pieces
     
             result = game.king_in_check?
             expect(result).to eq(true)
