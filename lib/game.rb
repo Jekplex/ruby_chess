@@ -96,12 +96,13 @@ class Game
     # loop through every piece and check if it's moves contains an opposite coloured king.
     # if true, return true else return false.
 
-    if king_color != nil
+    if king_color != nil # given colour
       for i in 0..7
         for j in 0..7
           if board.at([i, j]).to_s == "-"
             next
           else
+            # position is piece
             board.at([i, j]).moves.each do |target|
               if board.at(target).to_s == "-"
                 next

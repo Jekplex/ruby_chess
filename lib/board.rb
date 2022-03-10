@@ -10,11 +10,11 @@ class Board
 
   def initialize(board_template = nil)
 
-    if board_template != nil
-      @data = board_template.data.map(&:clone)
+    if board_template == nil
+      @data = Array.new(8) { Array.new(8, "-") }
       @temp = []
     else
-      @data = Array.new(8) { Array.new(8, "-") }
+      @data = board_template.data.map(&:clone)
       @temp = []
     end
     
@@ -139,8 +139,11 @@ class Board
       sim_board.get_data[piece.position[0]][piece.position[1]] = "-"
       piece.position = move
       sim_board.place_in(piece)
+
       sim_board.update_board_for_all_pieces
       sim_board.update_moves_for_all_pieces
+
+      #sim_board.print_board
 
       if Game.king_in_check?(piece.color_sym, sim_board)
         to_be_deleted << move
