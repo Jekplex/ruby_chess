@@ -68,35 +68,11 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
+          board.print_board
+
           board.remove_self_checking_moves(white_pawn)
           result = white_pawn.moves
           expect(result.length).to eq(0)
-
-        end       
-
-      end
-
-      context "bishop" do
-
-        it "moves returns 6" do
-
-          board = Board.new()
-          white_king = Piece.new(:king, :white, [0,0], board)
-          white_bishop = Piece.new(:bishop, :white, [1,1], board)
-          black_queen = Piece.new(:queen, :black, [7,7], board)
-
-          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
-          board.place_in(white_bishop)
-          board.place_in(black_queen)
-
-          board.update_board_and_moves_on_all_pieces
-
-          board.remove_self_checking_moves(white_bishop)
-
-          board.print_moves_for("b2")
-
-          result = white_bishop.moves
-          expect(result.length).to eq(6)
 
         end       
 
@@ -116,6 +92,8 @@ describe Board do
           board.place_in(black_queen)
 
           board.update_board_and_moves_on_all_pieces
+
+          board.print_board
 
           board.remove_self_checking_moves(white_knight)
           result = white_knight.moves
@@ -140,6 +118,8 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
+          board.print_board
+
           board.remove_self_checking_moves(white_rook)
           result = white_rook.moves
           expect(result.length).to eq(0)
@@ -147,6 +127,84 @@ describe Board do
         end       
 
       end
+
+      context "bishop" do
+
+        it "moves returns 6" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [0,0], board)
+          white_bishop = Piece.new(:bishop, :white, [1,1], board)
+          black_queen = Piece.new(:queen, :black, [7,7], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_bishop)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          board.print_board
+
+          board.remove_self_checking_moves(white_bishop)
+
+          result = white_bishop.moves
+          expect(result.length).to eq(6)
+
+        end     
+
+      end
+
+      context "queen" do
+
+        it "moves returns 6" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [0,0], board)
+          white_queen = Piece.new(:queen, :white, [1,1], board)
+          black_queen = Piece.new(:queen, :black, [7,7], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_queen)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          board.print_board
+
+          board.remove_self_checking_moves(white_queen)
+
+          result = white_queen.moves
+          expect(result.length).to eq(6)
+
+        end   
+      end
+
+      context "king (impossible but funny)" do
+
+        it "moves returns 0" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [0,0], board)
+          white_king2 = Piece.new(:king, :white, [1,1], board)
+          black_queen = Piece.new(:queen, :black, [7,7], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_king2)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          board.print_board
+
+          board.remove_self_checking_moves(white_king2)
+
+          result = white_king2.moves
+          expect(result.length).to eq(0)
+
+        end   
+      end
+
+      
 
     end
 
