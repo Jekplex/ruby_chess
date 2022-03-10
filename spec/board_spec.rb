@@ -68,7 +68,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_pawn)
           result = white_pawn.moves
@@ -93,7 +93,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_knight)
           result = white_knight.moves
@@ -118,7 +118,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_rook)
           result = white_rook.moves
@@ -143,7 +143,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_bishop)
 
@@ -169,7 +169,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_queen)
 
@@ -194,7 +194,7 @@ describe Board do
 
           board.update_board_and_moves_on_all_pieces
 
-          board.print_board
+          # board.print_board
 
           board.remove_self_checking_moves(white_king2)
 
