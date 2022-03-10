@@ -143,14 +143,14 @@ class Board
       sim_board.update_board_for_all_pieces
       sim_board.update_moves_for_all_pieces
 
-      #sim_board.print_board
+      # sim_board.print_board
 
       if Game.king_in_check?(piece.color_sym, sim_board)
         to_be_deleted << move
       end
 
       # reset
-      board = Board.new(og_sim_board)
+      sim_board = Board.new(og_sim_board)
       piece.position = og_position
       piece.moves = og_moves
       
