@@ -20,35 +20,40 @@ class Game
   def start
 
     introduction
+    game_loop
 
-    # game play loop
-
-    # player 1 picks a valid piece to move
-    # print moves for the piece
-    # player 1 picks new position for piece
-    # switch player
-    # player 2 picks a valid piece to move
-    # print moves for the piece
-    # player 2 picks new position for piece
-    # switch back to player 1
-    # loop this until checkmate.
-  
   end
 
   def game_over?
-    #false
-
-    # game is over when a king is in check and the checked player has no legal moves to get out of check.
-    # checkmate
 
     @board.update_board_and_moves_on_all_pieces
 
     if king_in_check? && !has_moves?(@player)
-      puts "CHECKMATE #{@player}!"
+      end_game(@player)
       true
     else
       false
     end
+
+  end
+
+  def end_game(current_player)
+
+    puts ""
+    puts "CHECKMATE!".red
+
+    if current_player == 0 # black wins
+      puts "BLACK (".red + Chess.icons[:black][:king] + ") WINS!".red
+    else
+      # white wins
+      puts "WHITE (".red + Chess.icons[:white][:king] + ") WINS!".red
+    end
+
+    puts ""
+    puts "Thank you for playing :)".green
+    puts ""
+
+    exit
 
   end
 
@@ -290,7 +295,6 @@ class Game
     puts ""
     puts "Welcome to Jekplex's Chess"
     puts "Made for the command line using Ruby"
-    puts ""
   end
 
   def setup_board_custom(board)
