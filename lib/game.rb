@@ -17,7 +17,6 @@ class Game
 
   end
 
-  # player vs play
   def start
 
     introduction
@@ -197,9 +196,17 @@ class Game
 
     puts ""
 
-    # validate selected piece
+    if selected_piece_pos == "SAVE"
+      data = Marshal.dump(self)
+      File.open("saved_game.txt", "w") { |f| f.write "#{data}" }
+      exit
+    elsif selected_piece_pos == "LOAD"
+      data = File.open("saved_game.txt").read
+      previous_game = Marshal.load(data)
+      previous_game.game_loop
+    end
 
-    # i need to validate color of piece with player
+    # validate selected piece
 
     if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
       # good input
