@@ -336,5 +336,142 @@ describe Board do
       
     end
 
+    context "when white can uncheck itself... (vs queen)" do
+
+      context "pawn" do
+        
+        it "moves.length returns 1" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [2,0], board)
+          white_pawn = Piece.new(:pawn, :white, [1,1], board)
+          black_queen = Piece.new(:queen, :black, [7,5], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_pawn)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          #p white_pawn.moves
+          board.remove_self_checking_moves(white_pawn)
+          result = white_pawn.moves.length
+          expect(result).to eq(1)
+
+        end
+
+      end
+
+      context "knight" do
+        
+        it "moves.length returns 2" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [2,0], board)
+          white_knight = Piece.new(:knight, :white, [2,3], board)
+          black_queen = Piece.new(:queen, :black, [7,5], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_knight)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          #p white_pawn.moves
+          board.remove_self_checking_moves(white_knight)
+          result = white_knight.moves.length
+          expect(result).to eq(2)
+
+          # board.print_moves_for("d3")
+
+        end
+
+      end
+
+      context "bishop" do
+        
+        it "moves.length returns 1" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, [2,0], board)
+          white_bishop = Piece.new(:bishop, :white, [0,6], board)
+          black_queen = Piece.new(:queen, :black, [7,5], board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_bishop)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          #p white_pawn.moves
+          board.remove_self_checking_moves(white_bishop)
+          result = white_bishop.moves.length
+          expect(result).to eq(1)
+
+          # board.print_moves_for("g1")
+
+        end
+
+      end
+
+      context "rook" do
+        
+        it "moves.length returns 1" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, Board.boardpos_to_datapos("a3"), board)
+          white_rook = Piece.new(:rook, :white, Board.boardpos_to_datapos("g6"), board)
+          black_queen = Piece.new(:queen, :black, Board.boardpos_to_datapos("f8"), board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_rook)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          #p white_pawn.moves
+          board.remove_self_checking_moves(white_rook)
+          result = white_rook.moves.length
+          expect(result).to eq(1)
+
+          #board.print_moves_for("g6")
+
+        end
+
+      end
+
+      context "queen" do
+        
+        it "moves.length returns 3" do
+
+          board = Board.new()
+          white_king = Piece.new(:king, :white, Board.boardpos_to_datapos("a3"), board)
+          white_queen = Piece.new(:queen, :white, Board.boardpos_to_datapos("f4"), board)
+          black_queen = Piece.new(:queen, :black, Board.boardpos_to_datapos("f8"), board)
+
+          board.place_in(white_king) # maybe make it so that this function can take multiple parameters
+          board.place_in(white_queen)
+          board.place_in(black_queen)
+
+          board.update_board_and_moves_on_all_pieces
+
+          #p white_pawn.moves
+          board.remove_self_checking_moves(white_queen)
+          result = white_queen.moves.length
+          expect(result).to eq(3)
+
+          #board.print_moves_for("f4")
+
+        end
+
+      end
+
+      
+
+    end
+
+    # assuming black is the same for the context above for now...
+
+
   end
 end

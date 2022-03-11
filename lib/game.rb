@@ -37,7 +37,45 @@ class Game
   end
 
   def game_over?
-    false
+    #false
+
+    # game is over when a king is in check and the checked player has no legal moves to get out of check.
+    # checkmate
+
+    @board.update_board_and_moves_on_all_pieces
+
+    if king_in_check? && !has_moves?(@player)
+      puts "CHECKMATE #{@player}!"
+      true
+    else
+      false
+    end
+
+  end
+
+  def has_moves?(player)
+    if player == 0 # white
+      whites = @board.get_whites
+      whites.each do |piece|
+        if piece.moves.length == 0
+          next
+        else
+          true
+        end
+      end
+      false
+    else
+      blacks = @board.get_blacks
+      blacks.each do |piece|
+        if piece.moves.length == 0
+          next
+        else
+          true
+        end
+      end
+      false
+    end
+
   end
 
   def king_in_check?(king_color = nil)

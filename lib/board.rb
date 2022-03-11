@@ -83,6 +83,18 @@ class Board
   
   end
 
+  def self.boardpos_to_datapos(board_pos)
+
+    if board_pos.length != 2 || !board_pos[0].match?(/^[a-h]$/) || !board_pos[1].match?(/^[1-8]$/)
+      return nil
+    end
+
+    x = board_pos[1].to_i - 1
+    y = self.letter_pos_to_data_pos(board_pos[0])
+    return [x, y]
+  
+  end
+
   def arraypos_to_boardpos(array_pos)
     
     if array_pos.length != 2
@@ -160,6 +172,52 @@ class Board
     to_be_deleted.each do |pos|
       piece.moves.delete(pos)
     end
+
+  end
+
+  def get_whites
+
+    out = []
+
+    for i in 0..7
+      for j in 0..7
+        if @data[i][j] == "-"
+          next
+        else
+          # piece found
+          if @data[i][j].color_sym == :white
+            out << @data[i][j]
+          else
+            next
+          end
+        end
+      end
+    end
+
+    out
+
+  end
+
+  def get_blacks
+
+    out = []
+
+    for i in 0..7
+      for j in 0..7
+        if @data[i][j] == "-"
+          next
+        else
+          # piece found
+          if @data[i][j].color_sym == :black
+            out << @data[i][j]
+          else
+            next
+          end
+        end
+      end
+    end
+
+    out
 
   end
 
@@ -347,6 +405,29 @@ class Board
   private
 
   def letter_pos_to_data_pos(char)
+
+    case char
+      when "a"
+        return 0
+      when "b"
+        return 1
+      when "c"
+        return 2
+      when "d"
+        return 3
+      when "e"
+        return 4
+      when "f"
+        return 5
+      when "g"
+        return 6
+      when "h"
+        return 7
+    end
+
+  end
+
+  def self.letter_pos_to_data_pos(char)
 
     case char
       when "a"
