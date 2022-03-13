@@ -76,8 +76,15 @@ class Piece
 
       for i in 0..7
         if @position == [1, i]
-          @moves << [2, i]
-          @moves << [3, i]
+
+          if @board.at([2, i]) == "-"
+            @moves << [2, i]
+          end
+
+          if @board.at([3, i]) == "-"
+            @moves << [3, i]
+          end
+          
         end
       end
 
@@ -99,8 +106,15 @@ class Piece
 
       for i in 0..7
         if @position == [6, i]
-          @moves << [5, i]
-          @moves << [4, i]
+
+          if @board.at([5, i]) == "-"
+            @moves << [5, i]
+          end
+
+          if @board.at([4, i]) == "-"
+            @moves << [4, i]
+          end
+
         end
       end
 
@@ -420,6 +434,7 @@ class Piece
     # delete any moves that causes a self check...
     # this solution could only be produced in board.rb
     # go to board.rb for solution
+    
 
   end
 
