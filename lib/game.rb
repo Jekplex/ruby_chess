@@ -79,7 +79,7 @@ class Game
         piece.build_moves
         @board.remove_self_checking_moves(piece)
 
-        puts "#{piece.icon} - #{piece.moves}"
+        #puts "#{piece.icon} - #{piece.moves}"
 
         if piece.moves.length == 0
           next
@@ -96,7 +96,7 @@ class Game
         piece.build_moves
         @board.remove_self_checking_moves(piece)
 
-        puts "#{piece.icon} - #{piece.moves}"
+        #puts "#{piece.icon} - #{piece.moves}"
 
         if piece.moves.length == 0
           next
@@ -223,18 +223,29 @@ class Game
     puts ""
   end
 
-  # def is_selected_piece_pos_valid(selected_piece_pos)
-  #   if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
+  def is_selected_piece_pos_valid?(selected_piece_pos)
+    if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
+      true
+    else
+      false
+    end
+  end
+
+  def is_new_pos_valid?(new_pos, piece_moves_arr)
+    if @board.validate_boardpos_string(new_pos) &&  @board.validate_given_boardpos_to_options(new_pos, piece_moves_arr)
+      true
+    else
+      false
+    end
+  end
 
   def piece_select
+
+    @board.update_board_and_moves_on_all_pieces
     
     print_board
 
+    # grab the piece that the player wants to move
     puts "Player #{@player+1}"
     puts "Select a piece... For example: 'e2'"
     selected_piece_pos = gets.chomp
@@ -253,62 +264,38 @@ class Game
     end
 
     
-    # if is_selected_piece_pos_valid(selected_piece_pos)
+    if is_selected_piece_pos_valid?(selected_piece_pos)
       
-    #   # selected_piece_pos input is valid
+      # selected_piece_pos input is valid
 
-    #   piece = @board.at(@board.boardpos_to_arraypos(selected_piece_pos))
+      piece = @board.at(@board.boardpos_to_arraypos(selected_piece_pos))
 
-    #   # selected piece has no moves
-    #   if !piece.has_moves?
-    #     puts "Error! This piece has no available moves. Please try again.".red
-    #     return
-    #   end
+      # need to remove self checking moves here because...
+      # it's doesn't really work in piece.rb even tho it belongs in there... :/
+      @board.remove_self_checking_moves(piece)
 
-    # end
-
-    # validate selected piece
-
-    if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
-      # good input
-
-      # good input but no moves
-      if @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).moves == []
+      # selected piece has no moves
+      if !piece.has_moves?
         puts "Error! This piece has no available moves. Please try again.".red
         return
       end
 
-      # grab piece
-      selected_piece = @board.at(@board.boardpos_to_arraypos(selected_piece_pos))
+      # selected piece has moves...
 
-      # print movables for that position
+      # show moves to player:
       @board.print_moves_for(selected_piece_pos)
 
-      if selected_piece.moves == []
-        puts "Error! This piece has no available moves. Please try again.".red
-        return
-      end
-
-      # select new pos
+      # grab new position for the piece from player
       puts ""
       puts "Player #{@player+1}"
       puts "Select new position... For example: 'e4'"
-
       new_pos = gets.chomp
-
       puts ""
 
-      if @board.validate_boardpos_string(new_pos) &&  @board.validate_given_boardpos_to_options(new_pos, selected_piece.moves)
-
-        # good input
-
-        # move piece position
-        #pos = @board.boardpos_to_arraypos(new_pos)
-        
+      if is_new_pos_valid?(new_pos, piece.moves)
         @board.move(selected_piece_pos, new_pos)
         @board.update_board_and_moves_on_all_pieces
         switch_player
-
       else
 
         if new_pos == "" # peaking
@@ -316,22 +303,20 @@ class Game
         end
 
         # bad input
-
         puts "Error! Please try again.".red
-        piece_select
-
+        return
+      
       end
 
     else
-      # bad input
+
+      # bad input for selected_piece_pos
 
       # try again.
       puts "Error! Please try again.".red
-      piece_select
+      return
 
     end
-
-    #p @player
 
   end
 
