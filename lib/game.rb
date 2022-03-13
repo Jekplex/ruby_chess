@@ -28,12 +28,19 @@ class Game
 
     @board.update_board_and_moves_on_all_pieces
 
-    if king_in_check? && !has_moves?(@player)
-      end_game(@player)
-      true
-    else
-      false
-    end
+    if king_in_check?
+
+      puts ""
+      puts "CHECK!".red
+
+      if !has_moves?(@player)
+        end_game(@player)
+        return true
+      end
+      
+    end 
+
+    return false
 
   end
 
@@ -58,26 +65,47 @@ class Game
   end
 
   def has_moves?(player)
+
+    @board.update_board_and_moves_on_all_pieces
+
     if player == 0 # white
       whites = @board.get_whites
+      
+
       whites.each do |piece|
+
+        #puts "#{piece.icon} - #{piece.moves}"
+
+        piece.build_moves
+        @board.remove_self_checking_moves(piece)
+
+        puts "#{piece.icon} - #{piece.moves}"
+
         if piece.moves.length == 0
           next
         else
-          true
+          return true
         end
+
       end
-      false
+      return false
     else
       blacks = @board.get_blacks
       blacks.each do |piece|
+
+        piece.build_moves
+        @board.remove_self_checking_moves(piece)
+
+        puts "#{piece.icon} - #{piece.moves}"
+
         if piece.moves.length == 0
           next
         else
-          true
+          return true
         end
+
       end
-      false
+      return false
     end
 
   end
@@ -189,17 +217,30 @@ class Game
     piece_select until game_over?
   end
 
-  def piece_select
-    
+  def print_board
     puts ""
     @board.print_board
     puts ""
+  end
+
+  # def is_selected_piece_pos_valid(selected_piece_pos)
+  #   if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
+  #     true
+  #   else
+  #     false
+  #   end
+  # end
+
+  def piece_select
+    
+    print_board
 
     puts "Player #{@player+1}"
     puts "Select a piece... For example: 'e2'"
     selected_piece_pos = gets.chomp
-
     puts ""
+
+    # SAVING AND LOADING FEATURE
 
     if selected_piece_pos == "SAVE"
       data = Marshal.dump(self)
@@ -211,6 +252,21 @@ class Game
       previous_game.game_loop
     end
 
+    
+    # if is_selected_piece_pos_valid(selected_piece_pos)
+      
+    #   # selected_piece_pos input is valid
+
+    #   piece = @board.at(@board.boardpos_to_arraypos(selected_piece_pos))
+
+    #   # selected piece has no moves
+    #   if !piece.has_moves?
+    #     puts "Error! This piece has no available moves. Please try again.".red
+    #     return
+    #   end
+
+    # end
+
     # validate selected piece
 
     if @board.validate_boardpos_string(selected_piece_pos) && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)) != "-" && @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).color_sym == current_color_player 
@@ -219,7 +275,7 @@ class Game
       # good input but no moves
       if @board.at(@board.boardpos_to_arraypos(selected_piece_pos)).moves == []
         puts "Error! This piece has no available moves. Please try again.".red
-        piece_select
+        return
       end
 
       # grab piece

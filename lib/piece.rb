@@ -423,6 +423,14 @@ class Piece
 
   end
 
+  def has_moves?
+    if @moves.length > 0
+      true
+    else
+      false
+    end
+  end
+
   def to_s
     @icon
   end
