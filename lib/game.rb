@@ -2,11 +2,11 @@ require 'colorize'
 
 class Game
 
-  attr_accessor :board
+  attr_accessor :board, :player
 
-  def initialize(board, bool_setup_board)
+  def initialize(board, setup_board_bool, is_test = false)
     
-    if bool_setup_board
+    if setup_board_bool
       @board = setup_board(board)
       @board.update_board_and_moves_on_all_pieces
     else
@@ -14,6 +14,7 @@ class Game
     end
     
     @player = 0
+    @is_test = is_test
 
   end
 
@@ -30,12 +31,20 @@ class Game
 
     if king_in_check?
 
-      puts ""
-      puts "CHECK!".red
+      if !@is_test
+        puts ""
+        puts "CHECK!".red
+      end
 
       if !has_moves?(@player)
-        end_game(@player)
+
+        if !@is_test
+          puts ""
+          puts "CHECKMATE!".red
+        end
+
         return true
+
       end
       
     end 
@@ -45,9 +54,6 @@ class Game
   end
 
   def end_game(current_player)
-
-    puts ""
-    puts "CHECKMATE!".red
 
     if current_player == 0 # black wins
       puts "BLACK (".red + Chess.icons[:black][:king] + ") WINS!".red
@@ -74,9 +80,7 @@ class Game
 
       whites.each do |piece|
 
-        #puts "#{piece.icon} - #{piece.moves}"
-
-        piece.build_moves
+        # remove invalid self checking moves.
         @board.remove_self_checking_moves(piece)
 
         #puts "#{piece.icon} - #{piece.moves}"
@@ -93,10 +97,10 @@ class Game
       blacks = @board.get_blacks
       blacks.each do |piece|
 
-        piece.build_moves
         @board.remove_self_checking_moves(piece)
 
-        #puts "#{piece.icon} - #{piece.moves}"
+        # puts "#{piece.icon} - #{piece.moves}"
+        # piece.moves.each { |move| p @board.at(move).to_s }
 
         if piece.moves.length == 0
           next
@@ -215,6 +219,7 @@ class Game
 
   def game_loop
     piece_select until game_over?
+    end_game(@player)
   end
 
   def print_board
