@@ -408,8 +408,6 @@ describe Game do
     
             board.place_in(king)
             board.place_in(queen)
-
-            board.print_board
     
             result = game.king_in_check?
             expect(result).to eq(false)
@@ -418,6 +416,67 @@ describe Game do
         end
 
       end
+    end
+
+  end
+
+  describe "#game_over?" do
+    
+    context "white check" do
+
+      context "Fool's Mate" do
+
+        it "returns true" do
+
+          board = Board.new()
+          game = Game.new(board, true, true)
+
+          # setup board for checkmate
+          game.board.move("f2", "f3")
+          game.board.move("e7", "e5")
+          game.board.move("g2", "g4")
+          game.board.move("d8", "h4")
+          game.player = 0 # white turn
+
+          result = game.game_over?
+          expect(result).to eq(true)
+
+        end
+
+      end
+
+      
+
+    end
+
+    context "black check" do
+
+      context "Scholar's Mate" do
+
+        it "returns true" do
+
+          board = Board.new()
+          game = Game.new(board, true, true)
+
+          # setup board for checkmate
+          game.board.move("e2", "e4")
+          game.board.move("e7", "e5")
+          game.board.move("f1", "c4")
+          game.board.move("b8", "c6")
+          game.board.move("d1", "h5")
+          game.board.move("g8", "f6")
+          game.board.move("h5", "f7") # check hit
+          game.player = 1 # black turn
+
+          #p game.print_board
+
+          result = game.game_over?
+          expect(result).to eq(true)
+
+        end
+
+      end
+
     end
 
   end
