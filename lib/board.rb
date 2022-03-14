@@ -139,8 +139,8 @@ class Board
     # if it does not, then keep it.
 
     og_moves = piece.moves.map(&:clone)
-    og_sim_board = Board.new(piece.board)
-    sim_board = Board.new(og_sim_board)
+    og_sim_board = Marshal.load(Marshal.dump(piece.board)) #Board.new(piece.board)
+    sim_board = Marshal.load(Marshal.dump(og_sim_board)) #Board.new(og_sim_board)
 
     to_be_deleted = []
 
@@ -162,10 +162,10 @@ class Board
       end
 
       # reset
-      sim_board = Board.new(og_sim_board)
+      sim_board = Marshal.load(Marshal.dump(og_sim_board)) #Board.new(og_sim_board)
       piece.position = og_position
       piece.moves = og_moves
-      
+
     end
 
     # delete moves that cause self check
