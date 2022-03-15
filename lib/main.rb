@@ -1,10 +1,7 @@
-require_relative 'board'
-require_relative 'piece'
-require_relative 'chess'
+# frozen_string_literal: true
+
 require_relative 'game'
+require_relative 'board'
 
-game = Game.new(Board.new(), true)
+game = Game.new(Board.new, true)
 game.start
-
-
-

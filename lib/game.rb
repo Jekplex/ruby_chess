@@ -1,14 +1,15 @@
+require_relative 'piece'
 require 'colorize'
 
 class Game
 
   attr_accessor :board, :player
 
-  def initialize(board, setup_board_bool, is_test = false)
+  def initialize(board, setup_board_q, is_test = false)
     
-    if setup_board_bool
+    if setup_board_q
       @board = setup_board(board)
-      @board.update_board_and_moves_on_all_pieces
+      @board.update_board_for_all_pieces
     else
       @board = board
     end
@@ -55,7 +56,8 @@ class Game
 
   def end_game(current_player)
 
-    if current_player == 0 # black wins
+    if current_player == 0 
+      # black wins
       puts "BLACK (".red + Chess.icons[:black][:king] + ") WINS!".red
     else
       # white wins
@@ -75,15 +77,15 @@ class Game
     @board.update_board_and_moves_on_all_pieces
 
     if player == 0 # white
+
       whites = @board.get_whites
       
-
       whites.each do |piece|
 
         # remove invalid self checking moves.
         @board.remove_self_checking_moves(piece)
 
-        #puts "#{piece.icon} - #{piece.moves}"
+        # puts "#{piece.icon} - #{piece.moves}" # for testing
 
         if piece.moves.length == 0
           next
@@ -92,15 +94,18 @@ class Game
         end
 
       end
+
       return false
+
     else
+
       blacks = @board.get_blacks
+      
       blacks.each do |piece|
 
         @board.remove_self_checking_moves(piece)
 
-        # puts "#{piece.icon} - #{piece.moves}"
-        # piece.moves.each { |move| p @board.at(move).to_s }
+        # puts "#{piece.icon} - #{piece.moves}" # for testing
 
         if piece.moves.length == 0
           next
@@ -109,59 +114,16 @@ class Game
         end
 
       end
+
       return false
+
     end
 
   end
 
   def king_in_check?(king_color = nil)
 
-    # loop through every piece and check if it's moves contains an opposite coloured king.
-    # if true, return true else return false.
-
-    if king_color != nil 
-      for i in 0..7
-        for j in 0..7
-          if @board.at([i, j]).to_s == "-"
-            next
-          else
-            @board.at([i, j]).moves.each do |target|
-              if @board.at(target).to_s == "-"
-                next
-              else
-                if @board.at(target).color_sym == king_color && @board.at(target).type_sym == :king
-                  return true
-                else
-                  next
-                end
-              end
-            end
-          end
-        end
-      end
-      false
-    else
-      for i in 0..7
-        for j in 0..7
-          if @board.at([i, j]).to_s == "-"
-            next
-          else
-            @board.at([i, j]).moves.each do |target|
-              if @board.at(target).to_s == "-"
-                next
-              else
-                if @board.at(target).color_sym != @board.at([i, j]).color_sym && @board.at(target).type_sym == :king
-                  return true
-                else
-                  next
-                end
-              end
-            end
-          end
-        end
-      end
-      false
-    end   
+    Game.king_in_check?(king_color, @board)
 
   end
 
@@ -170,34 +132,48 @@ class Game
     # loop through every piece and check if it's moves contains an opposite coloured king.
     # if true, return true else return false.
 
-    if king_color != nil # given colour
+    if king_color != nil # if king_color is given...
+
       for i in 0..7
         for j in 0..7
+
           if board.at([i, j]).to_s == "-"
             next
           else
-            # position is piece
-            board.at([i, j]).moves.each do |target|
-              if board.at(target).to_s == "-"
-                next
-              else
-                if board.at(target).color_sym == king_color && board.at(target).type_sym == :king && (board.at(target).icon != board.at([i, j]).icon)
-                  return true
-                else
+            # a piece is found
+            if board.at([i, j]).color_sym == king_color # if piece is same colour as finding king then skip.
+              next
+            else
+              # a opposite color piece is found
+              board.at([i, j]).moves.each do |target|
+                
+                if board.at(target).to_s == "-"
                   next
+                else
+                  if board.at(target).color_sym == king_color && board.at(target).type_sym == :king
+                    return true
+                  else
+                    next
+                  end
                 end
+
               end
-            end
+
+            end     
           end
+
         end
       end
-      false
-    else
+
+      return false
+      
+    else # a king color was not given...
       for i in 0..7
         for j in 0..7
           if board.at([i, j]).to_s == "-"
             next
           else
+            # a piece is found...
             board.at([i, j]).moves.each do |target|
               if board.at(target).to_s == "-"
                 next
@@ -212,8 +188,8 @@ class Game
           end
         end
       end
-      false
-    end   
+      return false
+    end  
 
   end
 
@@ -257,7 +233,6 @@ class Game
     puts ""
 
     # SAVING AND LOADING FEATURE
-
     if selected_piece_pos == "SAVE"
       data = Marshal.dump(self)
       File.open("saved_game.txt", "w") { |f| f.write "#{data}" }
@@ -307,7 +282,7 @@ class Game
           return
         end
 
-        # bad input
+        # new_pos is bad
         puts "Error! Please try again.".red
         return
       
@@ -316,8 +291,6 @@ class Game
     else
 
       # bad input for selected_piece_pos
-
-      # try again.
       puts "Error! Please try again.".red
       return
 
@@ -341,12 +314,6 @@ class Game
     puts ""
     puts "Welcome to Jekplex's Chess"
     puts "Made for the command line using Ruby"
-  end
-
-  def setup_board_custom(board)
-    white_rook1 = Piece.new(:rook, :white, board.boardpos_to_arraypos("a1"), board)
-    board.place_in(white_rook1)
-    return board
   end
 
   def setup_board(board)
