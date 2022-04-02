@@ -1,3 +1,5 @@
-# ruby_chess
+# Ruby Chess
 
-Command line chess game written in Ruby.
+A command line chess game written in Ruby.
+
+Currently only designed for two players.
