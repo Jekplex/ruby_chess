@@ -135,7 +135,7 @@ class Board
     # we want to test out each move
     # by moving the piece to the new slot
     # and checking if that causes a self check
-    # if it does, remove that piece from @moves
+    # if it does, remove that move from @moves
     # if it does not, then keep it.
 
     og_moves = piece.moves.map(&:clone)
@@ -326,7 +326,7 @@ class Board
     # used to check if board updates on all pieces correctly.
     #@data[new_datapos[0]][new_datapos[1]].board.print_board
 
-    print_board
+    #print_board
 
   end
 

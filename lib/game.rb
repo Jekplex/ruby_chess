@@ -312,8 +312,9 @@ class Game
 
   def introduction
     puts ""
-    puts "Welcome to Jekplex's Chess"
-    puts "Made for the command line using Ruby"
+    puts "Welcome to Jekplex's Chess".blue
+    puts "Made for the command line using Ruby".blue
+    puts "Designed for two players".blue
   end
 
   def setup_board(board)
