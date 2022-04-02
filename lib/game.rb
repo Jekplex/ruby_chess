@@ -228,7 +228,7 @@ class Game
 
     # grab the piece that the player wants to move
     puts "Player #{@player+1}"
-    puts "Select a piece... For example: 'e2'"
+    puts "Select a piece... For example: 'e2' or 'SAVE' to 'LOAD' later"
     selected_piece_pos = gets.chomp
     puts ""
 
@@ -240,6 +240,7 @@ class Game
     elsif selected_piece_pos == "LOAD"
       data = File.open("saved_game.txt").read
       previous_game = Marshal.load(data)
+      puts "Loading...".red
       previous_game.game_loop
     end
 
