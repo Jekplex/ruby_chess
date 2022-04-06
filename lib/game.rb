@@ -255,8 +255,17 @@ class Game
 
       puts "Loading...".red
       previous_game = Marshal.load(data)
-      puts "Load Sucess!".green
+      puts "Load Success!".green
       previous_game.game_loop
+      exit # to avoid containers of games
+
+    elsif selected_piece_pos == "new" # NEW
+
+      puts "Creating new game...".red
+      new_game = Game.new(Board.new, true)
+      puts "Loading new game...".red
+      puts "Load Success!".green
+      new_game.game_loop
       exit # to avoid containers of games
       
     end
