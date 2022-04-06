@@ -229,19 +229,36 @@ class Game
     # grab the piece that the player wants to move
     puts "Player #{@player+1}"
     puts "Select a piece... For example: 'e2' or 'SAVE' to 'LOAD' later"
-    selected_piece_pos = gets.chomp
+    selected_piece_pos = gets.chomp.downcase
     puts ""
 
     # SAVING AND LOADING FEATURE
-    if selected_piece_pos == "SAVE"
+    if selected_piece_pos == "save" # SAVE
+
+      puts "Saving...".red
       data = Marshal.dump(self)
       File.open("saved_game.txt", "w") { |f| f.write "#{data}" }
-      exit
-    elsif selected_piece_pos == "LOAD"
+      puts "Save Success!".green
+
+      return
+
+    elsif selected_piece_pos == "load" # LOAD
+
       data = File.open("saved_game.txt").read
-      previous_game = Marshal.load(data)
+
+      if data == "" then
+        puts "Error! A saved game could not be found.".red
+        return
+      end
+      
+      # load saved game
+
       puts "Loading...".red
+      previous_game = Marshal.load(data)
+      puts "Load Sucess!".green
       previous_game.game_loop
+      exit # to avoid containers of games
+      
     end
 
     
@@ -270,7 +287,7 @@ class Game
       puts ""
       puts "Player #{@player+1}"
       puts "Select new position... For example: 'e4'"
-      new_pos = gets.chomp
+      new_pos = gets.chomp.downcase
       puts ""
 
       if is_new_pos_valid?(new_pos, piece.moves)
