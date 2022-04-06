@@ -228,7 +228,7 @@ class Game
 
     # grab the piece that the player wants to move
     puts "Player #{@player+1}"
-    puts "Select a piece... For example: 'e2' or 'SAVE' to 'LOAD' later"
+    puts "Select a piece... For example: 'e2' or 'SAVE', 'LOAD', 'NEW'"
     selected_piece_pos = gets.chomp.downcase
     puts ""
 
